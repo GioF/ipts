@@ -18,7 +18,7 @@ export default function Page({cid, ipfs}){
       setDone(true)
     }
 
-    if(ipfs) handleStream()
+    if(ipfs && cid) handleStream()
 
     return function cleanup () {
       if(!done) controller.abort()
