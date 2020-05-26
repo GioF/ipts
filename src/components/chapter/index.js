@@ -3,6 +3,8 @@ import {useState, useEffect} from 'react';
 import Page from '../page/';
 
 export default function Chapter({cid, ipfs}){
+  const [controller] = useState(new AbortController())
+  const [done, setDone] = useState(false)
   const [files, setFiles] = useState([])
   const [pageNumber, setPageNumber] = useState(0)
 
@@ -16,14 +18,20 @@ export default function Chapter({cid, ipfs}){
 
   useEffect(() => {
     async function getFolderInfo(){
-      for await(const chunk of ipfs.ls(cid)){
+      for await(const chunk of ipfs.ls(cid, {signal: controller.signal})){
         setFiles(oldList => [...oldList, chunk])
       }
+      setDone(true)
     }
 
-    if(ipfs) getFolderInfo()
+    if(ipfs && cid) getFolderInfo()
 
-  }, [ipfs])
+    function cleanup(){
+      setFiles([])
+      if(!done) controller.abort()
+      setPageNumber(0)
+    }
+  }, [ipfs, cid])
 
   return(
     <>
