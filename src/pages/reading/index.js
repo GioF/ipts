@@ -5,26 +5,27 @@ import React from 'react';
 
 export default function Reading(){
   const { ipfs, ipfsState } = useIpfs()
-  const [data, setData] = useState({});
+  const [data, setData] = useState([])
+  const [nodeInfo, setNodeInfo]  = useState()
 
-  console.log('rendered! ', ipfs)
 
   useEffect(() => {
-    async function getNodeId() {
-      console.log('nodeState:', ipfsState)
-      if(ipfsState){
-        ipfs.id().then(res => {console.log(res); setData(res)}).catch(err => console.log('error ocurred while getting node data: ', err))
-      }
-    }
 
-    getNodeId()
+    async function getNodeId() {
+      ipfs.id()
+        .then(setNodeInfo)
+        .catch(console.log);
+
+    }
+    if (ipfsState) getNodeId() 
+
   }, [ipfs, ipfsState])
 
 
 
   return(
     <>
-    {ipfsState ? data.id : 'node not set yet'}
+    {ipfsState && nodeInfo ? `Node set with id ${nodeInfo.id}` : 'Node not set yet'}
     </>
   )
 }
