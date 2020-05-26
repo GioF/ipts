@@ -14,6 +14,13 @@ export default function Reading(){
     if(ipfsState){
       ipfs.id().then(setNodeInfo)
         .catch(console.log)
+
+      if(process.env.NODE_ENV === 'development'){
+          ipfs.swarm.connect(process.env.REACT_APP_IPFS_MULTIADDR)
+            .then(console.log('connected to dev node'))
+            .catch(console.log)
+      }
+
     }
     if (ipfsState) getNodeId() 
 
