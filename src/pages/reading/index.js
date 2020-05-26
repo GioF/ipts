@@ -22,7 +22,7 @@ export default function Reading(){
       }
 
     }
-    if (ipfsState) getNodeId() 
+
 
   }, [ipfs, ipfsState])
 
