@@ -39,6 +39,5 @@ export default function useIpfs(){
     }
   }, [])
     
-  console.log('rendered ipfs node! returning state: ', ipfsState)
   return { ipfs, ipfsState }
 }
