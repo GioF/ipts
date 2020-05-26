@@ -11,11 +11,10 @@ export default function Reading(){
 
   useEffect(() => {
 
-    function getNodeId() {
+    if(ipfsState){
       ipfs.id()
         .then(setNodeInfo)
-        .catch(console.log);
-
+        .catch(console.log)
     }
     if (ipfsState) getNodeId() 
 
