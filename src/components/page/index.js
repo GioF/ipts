@@ -6,7 +6,7 @@ import {Buffer} from 'buffer';
 export default function Page({cid, ipfs}){
   const [imgBuffer, setImgBuffer] = useState([])
   const [controller] = useState(new AbortController())
-  const [isImgLoaded, setImgState] = useState(false)
+  const [done, setDone] = useState(false)
 
   useEffect(() => {
     //starts to load image from given cid into buffer and aborts  
@@ -15,13 +15,13 @@ export default function Page({cid, ipfs}){
       for await(const chunk of ipfs.cat(cid, {signal: controller.signal})){
         setImgBuffer(oldBuff => [...oldBuff, chunk]) 
       }
-      setImgState(true)
+      setDone(true)
     }
 
     if(ipfs) handleStream()
 
     return function cleanup () {
-      if(!isImgLoaded) controller.abort()
+      if(!done) controller.abort()
     }
   }, [cid, ipfs])
 
