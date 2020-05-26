@@ -11,7 +11,7 @@ export default function Reading(){
 
   useEffect(() => {
 
-    async function getNodeId() {
+    function getNodeId() {
       ipfs.id()
         .then(setNodeInfo)
         .catch(console.log);
