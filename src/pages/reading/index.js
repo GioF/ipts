@@ -6,7 +6,6 @@ import Chapter from '../../components/chapter'
 
 export default function Reading(){
   const { ipfs, ipfsState } = useIpfs()
-  const [data, setData] = useState([])
   const [nodeInfo, setNodeInfo]  = useState()
   const [CID, setCID] = useState()
   const [formInput, setFormInput] = useState()

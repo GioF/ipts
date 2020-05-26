@@ -26,7 +26,7 @@ export default function Chapter({cid, ipfs}){
 
     if(ipfs && cid) getFolderInfo()
 
-    function cleanup(){
+    return function cleanup(){
       setFiles([])
       if(!done) controller.abort()
       setPageNumber(0)
