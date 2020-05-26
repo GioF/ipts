@@ -22,6 +22,8 @@ export default function Page({cid, ipfs}){
 
     return function cleanup () {
       if(!done) controller.abort()
+      setImgBuffer([])
+      setDone(false)
     }
   }, [cid, ipfs])
 
