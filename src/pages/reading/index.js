@@ -16,7 +16,6 @@ export default function Reading(){
   }
 
   useEffect(() => {
-
     if(ipfsState){
       ipfs.id().then(setNodeInfo)
         .catch(console.log)
@@ -26,12 +25,8 @@ export default function Reading(){
             .then(console.log('connected to dev node'))
             .catch(console.log)
       }
-
     }
-
-
   }, [ipfs, ipfsState])
-
 
 
   return(
@@ -42,7 +37,6 @@ export default function Reading(){
         <button type='submit'>Get files</button>
       </form>
       <Chapter ipfs={ipfs} cid={CID}/>
-
     </>
   )
 }
