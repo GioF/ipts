@@ -12,7 +12,8 @@ export default function Page({cid, ipfs}){
     //starts to load image from given cid into buffer and aborts  
     //via controller if component will unmout
     async function handleStream(){
-      for await(const chunk of ipfs.cat(cid, {signal: controller.signal})){
+      const signal = controller.signal
+      for await(const chunk of ipfs.cat(cid, { signal })){
         setImgBuffer(oldBuff => [...oldBuff, chunk]) 
       }
       setDone(true)
