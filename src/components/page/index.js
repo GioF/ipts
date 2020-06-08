@@ -5,17 +5,25 @@ import {Buffer} from 'buffer';
 
 export default function Page({cid, ipfs}){
   const [imgBuffer, setImgBuffer] = useState([])
+  const [translation, setTranslation] = useState()
   const [controller] = useState(new AbortController())
   const [done, setDone] = useState(false)
 
   useEffect(() => {
-    //starts to load image from given cid into buffer and aborts  
+    //starts to load image then translation from given cid into buffer and aborts  
     //via controller if component will unmout
     async function handleStream(){
       const signal = controller.signal
       for await(const chunk of ipfs.cat(cid, { signal })){
         setImgBuffer(oldBuff => [...oldBuff, chunk]) 
       }
+
+      let textBuffer = []
+      //will only begin loading translation data if component isn't unloading
+      for await(const chunk of ipfs.cat(trCid, { signal })){
+        textBuffer = [...textBuffer, chunk]
+      }
+      setTranslation(JSON.parse(Buffer.concat(textBuffer).toString()))
       setDone(true)
     }
 
