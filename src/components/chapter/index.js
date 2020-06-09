@@ -18,8 +18,8 @@ export default function Chapter({cid, ipfs}){
 
   useEffect(() => {
     async function getFolderInfo(){
-      for await(const chunk of ipfs.ls(cid, {signal: controller.signal})){
-        setFiles(oldList => [...oldList, chunk])
+      for await(const item of ipfs.ls(cid, {signal: controller.signal})){
+        setFiles(oldList => [...oldList, item])
       }
       setDone(true)
     }
