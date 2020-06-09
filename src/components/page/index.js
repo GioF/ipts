@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import {Buffer} from 'buffer';
+import {Box, Container} from './styles';
 
 
 export default function Page({cid, ipfs}){
@@ -36,9 +37,12 @@ export default function Page({cid, ipfs}){
     }
   }, [cid, ipfs])
 
-  return (//just returns image for now, will probably integrate translations later
-    <>
-    <img src={`data:image/jpg;base64,${Buffer.concat(imgBuffer).toString('base64')}`}/>
-    </>
+  return (
+    <Container>
+      <img src={`data:image/jpg;base64,${Buffer.concat(imgBuffer).toString('base64')}`}/>
+      {translation ? translation.map( (props, index) => {
+        return <Box key={index} { ...props } title={props.text} />
+      }) : null}
+    </Container>
   )
 }
