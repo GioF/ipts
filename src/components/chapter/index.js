@@ -7,6 +7,7 @@ export default function Chapter({cid, ipfs}){
   const [done, setDone] = useState(false)
   const [files, setFiles] = useState([])
   const [pageNumber, setPageNumber] = useState(0)
+  const [pageData, setPageData] = useState({})
 
   function incr(){
     setPageNumber(pageNumber < files.length - 1 ? pageNumber + 1 : pageNumber)
@@ -15,6 +16,27 @@ export default function Chapter({cid, ipfs}){
   function decr(){
     setPageNumber(pageNumber > 0 ? pageNumber - 1 : 0)
   }
+
+  useEffect(() => {
+    async function getPageData(){
+      let pair = []
+      for await(const item of ipfs.ls(files[pageNumber].cid, {signal: controller.signal})){
+        pair = [...pair, item];
+      }
+      const image = pair.find(item => item.name.includes("jpg"))
+      const data = pair.find(item => item.name.includes("json"))
+      
+      setPageData({image, data})
+    }
+
+    if(done){
+      getPageData()
+    }
+
+    return function cleanup(){
+      setPageData({})
+    }
+  }, [done, pageNumber])
 
   useEffect(() => {
     async function getFolderInfo(){
@@ -35,7 +57,7 @@ export default function Chapter({cid, ipfs}){
 
   return(
     <>
-      <Page ipfs={ipfs} cid={files[pageNumber] ? files[pageNumber].cid : null}/>
+      <Page ipfs={ipfs} {...pageData}/>
       <button onClick={decr}>{"<"}</button>{pageNumber}<button onClick={incr}>{">"}</button>
     </>
   )
