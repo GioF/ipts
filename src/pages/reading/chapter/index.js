@@ -1,6 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import Page from '../page/';
+import Page from '../page';
+import {Controller, Container} from './styles';
 
 export default function Chapter({cid, ipfs}){
   const [controller] = useState(new AbortController())
@@ -56,9 +57,10 @@ export default function Chapter({cid, ipfs}){
   }, [ipfs, cid])
 
   return(
-    <>
+    <Container>
+      <Controller>{"<"}</Controller>
       <Page ipfs={ipfs} {...pageData}/>
-      <button onClick={decr}>{"<"}</button>{pageNumber}<button onClick={incr}>{">"}</button>
-    </>
+      <Controller>{">"}</Controller>
+    </Container>
   )
 }

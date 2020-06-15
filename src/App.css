@@ -11,9 +11,17 @@ html, body, #root {
   min-height: 100%;
 }
 
+html, body, #root, .App {
+  height: 100%;
+}
+
 body, input, button {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: 14px;
   -webkit-font-smoothing: antialiased !important;
-  color: #000;
+  color: #C4C4C4;
+}
+
+body {
+  background-color: #282828;
 }
