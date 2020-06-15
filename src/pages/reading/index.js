@@ -3,7 +3,8 @@ import {useEffect, useState} from 'react';
 import React from 'react';
 import {Container} from './styles';
 
-import Chapter from './chapter'
+import Chapter from './chapter';
+import Dock from './dock';
 
 export default function Reading(){
   const { ipfs, ipfsState } = useIpfs()
@@ -38,6 +39,9 @@ export default function Reading(){
         <button type='submit'>Get files</button>
       </form>
       <Chapter ipfs={ipfs} cid={CID}/>
+      <Dock width={'300'}>
+        {/*TODO: add list components*/}
+      </Dock>
     </Container>
   )
 }
