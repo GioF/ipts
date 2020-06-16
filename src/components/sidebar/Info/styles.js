@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-
+import styled from "styled-components";
 
 export const Container = styled.div`
   height: 100%;
@@ -8,10 +7,13 @@ export const Container = styled.div`
   float: right;
   padding: 15px 10px;
 
-  background: linear-gradient(90deg, rgba(149, 174, 175, 0.09) 0%, rgba(255, 255, 255, 0) 25%), #3B3E3F; 
-
+  background: linear-gradient(
+      90deg,
+      rgba(149, 174, 175, 0.09) 0%,
+      rgba(255, 255, 255, 0) 25%
+    ),
+    #3b3e3f;
 `;
-
 
 export const Address = styled.div`
   width: 100%;
@@ -42,6 +44,6 @@ export const Status = styled.div`
   border-radius: 50%;
 
   float: right;
-  background-color: #2CC506;
-  box-shadow: 0px 0px 8px #2CC506;
+  background-color: ${(props) => (props.online ? "#2CC506" : "red")};
+  box-shadow: 0px 0px 8px ${(props) => (props.online ? "#2CC506" : "red")};
 `;

@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Container, Address, Status } from "./styles";
+import { IpfsContext } from "../../../App";
 
 export default function ConnectionInfo() {
+  const { ipfs, ipfsState } = useContext(IpfsContext);
+  const [state, setState] = useState("");
+
+  useEffect(() => {
+    if (ipfsState) ipfs.id().then(setState).catch(console.log);
+  }, [ipfs, ipfsState]);
+
   return (
     <Container>
       <Address>
-        <div className="plb">
-          Placeholder {/*TODO: add context to get ipfs data*/}
-        </div>
-        <Status /> {/*TODO: add context to get node status*/}
+        <div className="plb">{state ? state.id : "Loading..."}</div>
+        <Status online={ipfsState} />
       </Address>
     </Container>
   );
