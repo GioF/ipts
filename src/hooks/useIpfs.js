@@ -1,43 +1,42 @@
-import Ipfs from 'ipfs';
-import { useState, useEffect } from 'react';
+import Ipfs from "ipfs";
+import { useState, useEffect } from "react";
 
-let ipfs = null
+let ipfs = null;
 
-
-export default function useIpfs(){
-  const [ipfsState, setIpfsState] = useState(Boolean(ipfs))
+export default function useIpfs() {
+  const [ipfsState, setIpfsState] = useState(Boolean(ipfs));
 
   useEffect(() => {
-    async function startIpfs () {
+    async function startIpfs() {
       if (ipfs) {
-        console.log('IPFS already started')
+        console.log("IPFS already started");
       } else if (window.ipfs && window.ipfs.enable) {
-        console.log('Found window.ipfs')
-        ipfs = await window.ipfs.enable({ commands: ['id'] })
+        console.log("Found window.ipfs");
+        ipfs = await window.ipfs.enable({ commands: ["id"] });
       } else {
         try {
-          console.time('IPFS Started')
-          ipfs = await Ipfs.create()
-          console.timeEnd('IPFS Started')
+          console.time("IPFS Started");
+          ipfs = await Ipfs.create();
+          console.timeEnd("IPFS Started");
         } catch (error) {
-          console.error('IPFS init error:', error)
-          ipfs = null
+          console.error("IPFS init error:", error);
+          ipfs = null;
         }
       }
 
-      setIpfsState(Boolean(ipfs))
+      setIpfsState(Boolean(ipfs));
     }
 
-    startIpfs()
-    return function cleanup () {
+    startIpfs();
+    return function cleanup() {
       if (ipfs && ipfs.stop) {
-        console.log('Stopping IPFS')
-        ipfs.stop().catch(err => console.error(err))
-        ipfs = null
-        setIpfsState(false)
+        console.log("Stopping IPFS");
+        ipfs.stop().catch((err) => console.error(err));
+        ipfs = null;
+        setIpfsState(false);
       }
-    }
-  }, [])
-    
-  return { ipfs, ipfsState }
+    };
+  }, []);
+
+  return { ipfs, ipfsState };
 }

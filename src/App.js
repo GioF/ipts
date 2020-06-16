@@ -1,16 +1,15 @@
-import React from 'react';
-import Reading from './pages/reading/index.js';
-import Sidebar from './components/sidebar/index.js';
+import React from "react";
+import Reading from "./pages/reading/index.js";
+import Sidebar from "./components/sidebar/index.js";
 
-
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <Sidebar/>
+      <Sidebar />
       <div className="Container">
-        <Reading/>
+        <Reading />
       </div>
     </div>
   );

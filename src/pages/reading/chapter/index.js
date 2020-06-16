@@ -1,66 +1,69 @@
-import React from 'react';
-import {useState, useEffect} from 'react';
-import Page from '../page';
-import {Controller, Container} from './styles';
+import React from "react";
+import { useState, useEffect } from "react";
+import Page from "../page";
+import { Controller, Container } from "./styles";
 
-export default function Chapter({cid, ipfs}){
-  const [controller] = useState(new AbortController())
-  const [done, setDone] = useState(false)
-  const [files, setFiles] = useState([])
-  const [pageNumber, setPageNumber] = useState(0)
-  const [pageData, setPageData] = useState({})
+export default function Chapter({ cid, ipfs }) {
+  const [controller] = useState(new AbortController());
+  const [done, setDone] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageData, setPageData] = useState({});
 
-  function incr(){
-    setPageNumber(pageNumber < files.length - 1 ? pageNumber + 1 : pageNumber)
+  function incr() {
+    setPageNumber(pageNumber < files.length - 1 ? pageNumber + 1 : pageNumber);
   }
 
-  function decr(){
-    setPageNumber(pageNumber > 0 ? pageNumber - 1 : 0)
+  function decr() {
+    setPageNumber(pageNumber > 0 ? pageNumber - 1 : 0);
   }
 
   useEffect(() => {
-    async function getPageData(){
-      let pair = []
-      for await(const item of ipfs.ls(files[pageNumber].cid, {signal: controller.signal})){
+    //gets both image and translation data then sets state with them
+    async function getPageData() {
+      let pair = [];
+      for await (const item of ipfs.ls(files[pageNumber].cid, {
+        signal: controller.signal,
+      })) {
         pair = [...pair, item];
       }
-      const image = pair.find(item => item.name.includes("jpg"))
-      const data = pair.find(item => item.name.includes("json"))
-      
-      setPageData({image, data})
+      const image = pair.find((item) => item.name.includes("jpg"));
+      const data = pair.find((item) => item.name.includes("json"));
+
+      setPageData({ image, data });
     }
 
-    if(done){
-      getPageData()
+    if (done) {
+      getPageData();
     }
 
-    return function cleanup(){
-      setPageData({})
-    }
-  }, [done, pageNumber])
+    return function cleanup() {
+      setPageData({});
+    };
+  }, [done, pageNumber]);
 
   useEffect(() => {
-    async function getFolderInfo(){
-      for await(const item of ipfs.ls(cid, {signal: controller.signal})){
-        setFiles(oldList => [...oldList, item])
+    async function getFolderInfo() {
+      for await (const item of ipfs.ls(cid, { signal: controller.signal })) {
+        setFiles((oldList) => [...oldList, item]);
       }
-      setDone(true)
+      setDone(true);
     }
 
-    if(ipfs && cid) getFolderInfo()
+    if (ipfs && cid) getFolderInfo();
 
-    return function cleanup(){
-      setFiles([])
-      if(!done) controller.abort()
-      setPageNumber(0)
-    }
-  }, [ipfs, cid])
+    return function cleanup() {
+      setFiles([]);
+      if (!done) controller.abort();
+      setPageNumber(0);
+    };
+  }, [ipfs, cid]);
 
-  return(
+  return (
     <Container>
-      <Controller>{"<"}</Controller>
-      <Page ipfs={ipfs} {...pageData}/>
-      <Controller>{">"}</Controller>
+      <Controller onClick={decr}>{"<"}</Controller>
+      <Page ipfs={ipfs} {...pageData} />
+      <Controller onClick={incr}>{">"}</Controller>
     </Container>
-  )
+  );
 }
