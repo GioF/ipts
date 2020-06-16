@@ -8,7 +8,6 @@ import { IpfsContext } from "../../App";
 
 export default function Reading() {
   const { ipfs, ipfsState } = useContext(IpfsContext);
-  const [nodeInfo, setNodeInfo] = useState();
   const [CID, setCID] = useState();
   const [formInput, setFormInput] = useState();
 
@@ -17,24 +16,8 @@ export default function Reading() {
     setCID(formInput);
   }
 
-  useEffect(() => {
-    if (ipfsState) {
-      ipfs.id().then(setNodeInfo).catch(console.log);
-
-      if (process.env.NODE_ENV === "development") {
-        ipfs.swarm
-          .connect(process.env.REACT_APP_IPFS_MULTIADDR)
-          .then(console.log("connected to dev node"))
-          .catch(console.log);
-      }
-    }
-  }, [ipfs, ipfsState]);
-
   return (
     <Container>
-      {ipfsState && nodeInfo
-        ? `Node set with id ${nodeInfo.id}`
-        : "Node not set yet"}
       <form onSubmit={updateFolder}>
         <input
           type="text"
