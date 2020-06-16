@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
-  height: 100px;
+  height: 70px;
   
   display: flex
   flex-direction: row;
@@ -24,9 +24,9 @@ export const NavButton = styled.div`
   justify-content: center;
   height: 100%;
   align-items: center;
-  
+
   &:hover {
-    background-color: #555A5B;
+    background-color: #555a5b;
     transition-duration: 300ms;
   }
 `;

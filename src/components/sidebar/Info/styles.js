@@ -5,7 +5,7 @@ export const Container = styled.div`
   width: 300px;
 
   float: right;
-  padding: 15px 10px;
+  padding: 10px 10px;
 
   background: linear-gradient(
       90deg,
@@ -29,6 +29,7 @@ export const Address = styled.div`
 
   font-size: 12px;
   padding: 0px 6px;
+  margin-bottom: 9px;
 
   .plb {
     text-overflow: ellipsis;
