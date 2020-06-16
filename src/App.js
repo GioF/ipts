@@ -24,7 +24,7 @@ function App() {
     <div className="App">
       <IpfsContext.Provider value={{ ipfs, ipfsState }}>
         <Sidebar />
-        <div className="Container">
+        <div className="Content">
           <Reading />
         </div>
       </IpfsContext.Provider>

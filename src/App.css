@@ -20,15 +20,20 @@ body, input, button {
   font-size: 14px;
   -webkit-font-smoothing: antialiased !important;
   color: #C4C4C4;
+  border: 0px;
 }
 
 body {
   background-color: #282828;
 }
 
-.Container {
-  display: flex;
-  flex-direction: row;
+.Content {
   height: 100%;
   width: 100%;
+
+  position: fixed;
+  top: 70px;
+
+  display: flex;
+  flex-direction: row;
 }
