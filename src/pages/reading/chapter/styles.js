@@ -1,10 +1,12 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  height: 100%;
+
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
   justify-content: space-between;
-  height: 100%;
 `;
 
 export const Controller = styled.div`
