@@ -1,13 +1,13 @@
-import useIpfs from "../../hooks/useIpfs.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import React from "react";
 import { Container } from "./styles";
 
 import Chapter from "./chapter";
 import Dock from "./dock";
+import { IpfsContext } from "../../App";
 
 export default function Reading() {
-  const { ipfs, ipfsState } = useIpfs();
+  const { ipfs, ipfsState } = useContext(IpfsContext);
   const [nodeInfo, setNodeInfo] = useState();
   const [CID, setCID] = useState();
   const [formInput, setFormInput] = useState();
