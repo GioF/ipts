@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Reading from "./pages/reading/index.js";
-import Sidebar from "./components/sidebar/index.js";
+import Sidebar from "./components/navbar/index.js";
 import useIpfs from "./hooks/useIpfs";
 
 import "./App.css";
