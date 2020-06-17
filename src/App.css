@@ -28,6 +28,16 @@ body {
   padding-top: 70px;
 }
 
+body::-webkit-scrollbar {
+  background-color: #3b3e3f;
+  width: 6px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #282828;
+  border-radius: 12px;
+}
+
 .Content {
   min-height: 100%;
   width: 100%;
