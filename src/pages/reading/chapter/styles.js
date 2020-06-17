@@ -12,7 +12,7 @@ export const Container = styled.div`
 export const Controller = styled.div`
   background-color: rgba(255, 255, 255, 4%);
   color: rgba(0, 0, 0, 25%);
-  height: 100%;
+  min-height: 100%;
   width: 40px;
 
   display: flex;
