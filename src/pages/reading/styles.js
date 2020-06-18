@@ -29,4 +29,6 @@ export const FolderInput = styled.input`
   color: #282828;
   background-position: 10px 4px;
   background-repeat: no-repeat;
+
+  transition: background-color 200ms;
 `;
