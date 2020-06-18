@@ -1,24 +1,23 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Page from "../page";
 import { Controller, Container } from "./styles";
 import { modeType } from "../../../utils";
+import usePageController from "../../../hooks/usePageController";
 
 export default function Chapter({ cid, ipfs }) {
   const [controller] = useState(new AbortController());
   const [done, setDone] = useState(false);
   const [files, setFiles] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [page, setPage, setPageByEvent] = usePageController(0, files.length);
   const [pageData, setPageData] = useState({});
   const [mode, setMode] = useState();
 
-  function incr() {
-    setPageNumber(pageNumber < files.length - 1 ? pageNumber + 1 : pageNumber);
-  }
-
-  function decr() {
-    setPageNumber(pageNumber > 0 ? pageNumber - 1 : 0);
-  }
+  useEffect(() => {
+    document.addEventListener("keydown", setPageByEvent);
+    return () => {
+      document.removeEventListener("keydown", setPageByEvent);
+    };
+  }, [files]);
 
   useEffect(() => {
     //gets both translation and image IPFS objects if on scanlation mode
@@ -27,7 +26,7 @@ export default function Chapter({ cid, ipfs }) {
       switch (mode) {
         case modeType.scanlation:
           let pair = [];
-          for await (const item of ipfs.ls(files[pageNumber].cid, {
+          for await (const item of ipfs.ls(files[page].cid, {
             signal: controller.signal,
           })) {
             pair = [...pair, item];
@@ -39,7 +38,7 @@ export default function Chapter({ cid, ipfs }) {
 
         case modeType.imageOnly:
           ipfs.files
-            .stat(`/ipfs/${files[pageNumber].cid}`)
+            .stat(`/ipfs/${files[page].cid}`)
             .then((image) => setPageData({ image }))
             .catch(console.log);
           break;
@@ -56,7 +55,7 @@ export default function Chapter({ cid, ipfs }) {
     return function cleanup() {
       setPageData({});
     };
-  }, [done, pageNumber]);
+  }, [done, page]);
 
   useEffect(() => {
     //function checks given ipfs for folder info and sets
@@ -82,15 +81,15 @@ export default function Chapter({ cid, ipfs }) {
     return function cleanup() {
       setFiles([]);
       if (!done) controller.abort();
-      setPageNumber(0);
+      setPage(0);
     };
   }, [ipfs, cid]);
 
   return (
     <Container>
-      <Controller onClick={decr}>{"<"}</Controller>
+      <Controller onClick={() => setPage(-1)}>{"<"}</Controller>
       <Page mode={mode} ipfs={ipfs} {...pageData} />
-      <Controller onClick={incr}>{">"}</Controller>
+      <Controller onClick={() => setPage(+1)}>{">"}</Controller>
     </Container>
   );
 }
