@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Page from "../page";
 import { Controller, Container } from "./styles";
+import { modeType } from "../../../utils";
 
 export default function Chapter({ cid, ipfs }) {
   const [controller] = useState(new AbortController());
@@ -9,6 +10,7 @@ export default function Chapter({ cid, ipfs }) {
   const [files, setFiles] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageData, setPageData] = useState({});
+  const [mode, setMode] = useState();
 
   function incr() {
     setPageNumber(pageNumber < files.length - 1 ? pageNumber + 1 : pageNumber);
@@ -19,18 +21,32 @@ export default function Chapter({ cid, ipfs }) {
   }
 
   useEffect(() => {
-    //gets both image and translation data then sets state with them
+    //gets both translation and image IPFS objects if on scanlation mode
+    //gets only image IPFS object if on imageOnly mode
     async function getPageData() {
-      let pair = [];
-      for await (const item of ipfs.ls(files[pageNumber].cid, {
-        signal: controller.signal,
-      })) {
-        pair = [...pair, item];
-      }
-      const image = pair.find((item) => item.name.includes("jpg"));
-      const data = pair.find((item) => item.name.includes("json"));
+      switch (mode) {
+        case modeType.scanlation:
+          let pair = [];
+          for await (const item of ipfs.ls(files[pageNumber].cid, {
+            signal: controller.signal,
+          })) {
+            pair = [...pair, item];
+          }
+          const image = pair.find((item) => item.name.includes("jpg"));
+          const data = pair.find((item) => item.name.includes("json"));
+          setPageData({ image, data });
+          break;
 
-      setPageData({ image, data });
+        case modeType.imageOnly:
+          ipfs.files
+            .stat(`/ipfs/${files[pageNumber].cid}`)
+            .then((image) => setPageData({ image }))
+            .catch(console.log);
+          break;
+
+        default:
+          alert(`Badly formatted mode: ${mode}`);
+      }
     }
 
     if (done) {
@@ -43,9 +59,20 @@ export default function Chapter({ cid, ipfs }) {
   }, [done, pageNumber]);
 
   useEffect(() => {
+    //function checks given ipfs for folder info and sets
+    //mode based on its structure
+    //TODO: refactor for better clarity
     async function getFolderInfo() {
+      let dirData = [];
       for await (const item of ipfs.ls(cid, { signal: controller.signal })) {
-        setFiles((oldList) => [...oldList, item]);
+        dirData.push(item);
+      }
+      setFiles(dirData);
+      if (dirData.length > 0) {
+        const result = dirData.filter((file) => file.type === "dir");
+        result.length > 0
+          ? setMode(modeType.scanlation)
+          : setMode(modeType.imageOnly);
       }
       setDone(true);
     }
@@ -62,7 +89,7 @@ export default function Chapter({ cid, ipfs }) {
   return (
     <Container>
       <Controller onClick={decr}>{"<"}</Controller>
-      <Page ipfs={ipfs} {...pageData} />
+      <Page mode={mode} ipfs={ipfs} {...pageData} />
       <Controller onClick={incr}>{">"}</Controller>
     </Container>
   );

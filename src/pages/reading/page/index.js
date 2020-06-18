@@ -2,8 +2,9 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Buffer } from "buffer";
 import { Box, Container } from "./styles";
+import { modeType } from "../../../utils";
 
-export default function Page({ data, image, ipfs }) {
+export default function Page({ data, image, ipfs, mode }) {
   const [imgBuffer, setImgBuffer] = useState([]);
   const [translation, setTranslation] = useState();
   const [controller] = useState(new AbortController());
@@ -17,21 +18,23 @@ export default function Page({ data, image, ipfs }) {
         setImgBuffer((oldBuff) => [...oldBuff, chunk]);
       }
 
-      let textBuffer = [];
-      //will only begin loading translation data if component isn't unloading
-      for await (const chunk of ipfs.cat(data.cid, { signal })) {
-        textBuffer = [...textBuffer, chunk];
+      if (mode === modeType.scanlation) {
+        let textBuffer = [];
+        //will only begin loading translation data if component isn't unloading
+        for await (const chunk of ipfs.cat(data.cid, { signal })) {
+          textBuffer = [...textBuffer, chunk];
+        }
+        setTranslation(JSON.parse(Buffer.concat(textBuffer).toString()));
       }
-      setTranslation(JSON.parse(Buffer.concat(textBuffer).toString()));
     }
 
-    if (ipfs && data) handleStream();
+    if (ipfs && image && mode != null) handleStream();
 
     return function cleanup() {
       controller.abort();
       setImgBuffer([]);
     };
-  }, [data, image, ipfs]);
+  }, [data, image, ipfs, mode]);
 
   return (
     <Container>

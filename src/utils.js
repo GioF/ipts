@@ -7,3 +7,8 @@ export function blinkWithMessage(formRef, message) {
     formRef.current.value = "";
   }, 500);
 }
+
+export const modeType = {
+  imageOnly: 0,
+  scanlation: 1,
+};
