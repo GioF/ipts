@@ -13,6 +13,7 @@ export const Container = styled.div`
   form {
     display: block;
     margin: auto;
+    margin-top: calc(50vh - 70px);
   }
 `;
 
