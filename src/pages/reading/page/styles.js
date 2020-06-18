@@ -9,6 +9,10 @@ export const Container = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+
+  img {
+    max-width: 100%;
+  }
 `;
 
 export const Box = styled.div`

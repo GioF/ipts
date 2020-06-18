@@ -13,7 +13,7 @@ export const Controller = styled.div`
   background-color: rgba(255, 255, 255, 4%);
   color: rgba(0, 0, 0, 25%);
   min-height: 100%;
-  width: 40px;
+  min-width: 40px;
 
   display: flex;
   justify-content: center;
