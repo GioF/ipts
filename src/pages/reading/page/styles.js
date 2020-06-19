@@ -13,6 +13,10 @@ export const Container = styled.div`
   img {
     max-width: 100%;
   }
+
+  .loadingIndicator {
+    margin-top: calc(50vh - 70px);
+  }
 `;
 
 export const Box = styled.div`

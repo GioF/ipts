@@ -1,4 +1,5 @@
 import React from "react";
+import ReactLoading from "react-loading";
 import { useEffect, useState } from "react";
 import { Buffer } from "buffer";
 import { Box, Container } from "./styles";
@@ -38,16 +39,27 @@ export default function Page({ data, image, ipfs, mode }) {
 
   return (
     <Container>
-      <img
-        src={`data:image/jpg;base64,${Buffer.concat(imgBuffer).toString(
-          "base64"
-        )}`}
-      />
-      {translation
-        ? translation.map((props, index) => {
-            return <Box key={index} {...props} title={props.text} />;
-          })
-        : null}
+      {imgBuffer.length > 0 ? (
+        <>
+          <img
+            alt={`page`}
+            src={`data:image/jpg;base64,${Buffer.concat(imgBuffer).toString(
+              "base64"
+            )}`}
+          />
+          {translation
+            ? translation.map((props, index) => {
+                return <Box key={index} {...props} title={props.text} />;
+              })
+            : null}
+        </>
+      ) : (
+        <ReactLoading
+          className={"loadingIndicator"}
+          type={"spin"}
+          color={"#4E5761"}
+        />
+      )}
     </Container>
   );
 }
