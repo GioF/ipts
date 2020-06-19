@@ -10,6 +10,8 @@ export const Container = styled.div`
     display: none;
   }
 
+  display: block;
+  margin: auto;
   img {
     max-width: 100%;
   }

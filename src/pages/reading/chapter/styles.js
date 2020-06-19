@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  height: 100%;
+  min-height: 100%;
 
   display: flex;
   flex-direction: row;
@@ -18,6 +18,7 @@ export const Controller = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
 
   &:hover{
     background-color: rgba(255, 255, 255, 40%);

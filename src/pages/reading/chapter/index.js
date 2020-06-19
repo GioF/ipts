@@ -89,7 +89,9 @@ export default function Chapter({ cid, ipfs }) {
     <Container>
       <Controller onClick={() => setPage(-1)}>{"<"}</Controller>
       <Page mode={mode} ipfs={ipfs} {...pageData} />
-      <Controller onClick={() => setPage(+1)}>{">"}</Controller>
+      <Controller style={{ right: "300px" }} onClick={() => setPage(+1)}>
+        {">"}
+      </Controller>
     </Container>
   );
 }
