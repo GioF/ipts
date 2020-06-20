@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
 import IpfsRouter from "ipfs-react-router";
 import Reading from "./pages/reading/index.js";
@@ -11,16 +11,6 @@ export const IpfsContext = React.createContext({});
 
 function App() {
   const { ipfs, ipfsState } = useIpfs();
-  useEffect(() => {
-    if (ipfsState) {
-      if (process.env.NODE_ENV === "development") {
-        ipfs.swarm
-          .connect(process.env.REACT_APP_IPFS_MULTIADDR)
-          .then(console.log("connected to dev node"))
-          .catch(console.log);
-      }
-    }
-  }, [ipfs, ipfsState]);
 
   return (
     <div className="App">

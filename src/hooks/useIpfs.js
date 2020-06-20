@@ -7,6 +7,17 @@ export default function useIpfs() {
   const [ipfsState, setIpfsState] = useState(Boolean(ipfs));
 
   useEffect(() => {
+    if (ipfsState) {
+      if (process.env.NODE_ENV === "development") {
+        ipfs.swarm
+          .connect(process.env.REACT_APP_IPFS_MULTIADDR)
+          .then(console.log("connected to dev node"))
+          .catch((e) => console.log("could not connect to the dev node: ", e));
+      }
+    }
+  }, [ipfsState]);
+
+  useEffect(() => {
     async function startIpfs() {
       if (ipfs) {
         console.log("IPFS already started");
