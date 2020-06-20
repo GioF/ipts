@@ -1,29 +1,48 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useHistory, useRouteMatch, generatePath } from "react-router-dom";
 
 export default function usePageController(initPage = 0, chapterLength) {
-  const [page, _setPage] = useState(0);
+  const match = useRouteMatch("/reading/:cid/:urlPage");
+  const [page, setLocalPage] = useState(
+    match ? parseInt(match.params.urlPage) : 0
+  );
+  const history = useHistory();
 
   function setPage(amount) {
     if (amount > 0) {
-      console.log(chapterLength, page);
-      _setPage((page) => (page < chapterLength - 1 ? page + amount : page));
+      setLocalPage((currentPage) =>
+        currentPage + amount < chapterLength
+          ? currentPage + amount
+          : currentPage
+      );
     } else if (amount < 0) {
-      _setPage((page) => (page > 0 ? page + amount : 0));
+      setLocalPage((currentPage) =>
+        currentPage + amount >= 0 ? currentPage + amount : 0
+      );
     }
   }
+
+  //side effect that pushes the current page number to the history
+  useEffect(() => {
+    const { cid } = match.params;
+    const path = generatePath(match.path, { cid, urlPage: page });
+    history.push(path);
+    // eslint-disable-next-line
+  }, [page]);
 
   const setPageByEvent = useCallback(
     ({ code }) => {
       switch (code) {
         case "ArrowLeft":
-          _setPage((page) => (page > 0 ? page - 1 : 0));
+          setPage(-1);
           break;
         case "ArrowRight":
-          _setPage((page) => (page < chapterLength - 1 ? page + 1 : page));
+          setPage(+1);
           break;
         default:
       }
     },
+    // eslint-disable-next-line
     [chapterLength]
   );
 

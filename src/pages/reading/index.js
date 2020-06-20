@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import React from "react";
 import { Container, FolderInput } from "./styles";
 
@@ -7,11 +7,12 @@ import Dock from "./dock";
 import { IpfsContext } from "../../App";
 import { blinkWithMessage } from "../../utils";
 import { useRef } from "react";
+import { Switch, Route, useHistory } from "react-router-dom";
 
 export default function Reading() {
   const { ipfs, ipfsState } = useContext(IpfsContext);
-  const [cid, setCid] = useState();
   const formRef = useRef(null);
+  const history = useHistory();
   const [formInput, setFormInput] = useState();
 
   function updateFolder(event) {
@@ -24,7 +25,7 @@ export default function Reading() {
         .then((stats) => {
           if (stats.type === "directory") {
             formRef.current.style.backgroundColor = "rgb(48, 130, 48)";
-            setTimeout(() => setCid(formInput), 500);
+            setTimeout(() => history.push(`reading/${formInput}/0`), 500);
           } else {
             blinkWithMessage(formRef, "CID must belong to a UNIXFS folder");
           }
@@ -38,24 +39,28 @@ export default function Reading() {
 
   return (
     <Container>
-      {cid ? (
-        <>
-          <Chapter ipfs={ipfs} cid={cid} />
-        </>
-      ) : (
-        <form onSubmit={updateFolder}>
-          <FolderInput
-            ref={formRef}
-            style={{
-              backgroundImage: `url(${require("../../res/ipfsindicator.svg")})`,
-            }}
-            type="text"
-            placeholder="Insert folder CID"
-            onChange={(event) => setFormInput(event.target.value)}
-          />
-          <button type="hidden" />
-        </form>
-      )}
+      <Switch>
+        <Route
+          path="/reading/:cid/"
+          render={({ match }) => {
+            return <Chapter ipfs={ipfs} {...match.params} />;
+          }}
+        />
+        <Route path="/reading" exact>
+          <form onSubmit={updateFolder}>
+            <FolderInput
+              ref={formRef}
+              style={{
+                backgroundImage: `url(${require("../../res/ipfsindicator.svg")})`,
+              }}
+              type="text"
+              placeholder="Insert folder CID"
+              onChange={(event) => setFormInput(event.target.value)}
+            />
+            <button type="hidden" />
+          </form>
+        </Route>
+      </Switch>
       <Dock width={"300"}>{/*TODO: add list components*/}</Dock>
     </Container>
   );
