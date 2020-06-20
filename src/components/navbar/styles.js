@@ -29,8 +29,10 @@ export const NavButton = styled.div`
   height: 100%;
   align-items: center;
 
+  background-color: inherit;
+  transition: background-color 300ms;
+
   &:hover {
     background-color: #555a5b;
-    transition-duration: 300ms;
   }
 `;

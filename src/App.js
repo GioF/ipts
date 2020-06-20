@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
+import { Route, Switch } from "react-router-dom";
+import IpfsRouter from "ipfs-react-router";
 import Reading from "./pages/reading/index.js";
-import Sidebar from "./components/navbar/index.js";
+import Navbar from "./components/navbar/index.js";
 import useIpfs from "./hooks/useIpfs";
 
 import "./App.css";
@@ -23,10 +25,16 @@ function App() {
   return (
     <div className="App">
       <IpfsContext.Provider value={{ ipfs, ipfsState }}>
-        <Sidebar />
-        <div className="Content">
-          <Reading />
-        </div>
+        <IpfsRouter>
+          <Navbar />
+          <Switch>
+            <Route path="/reading">
+              <div className="Content">
+                <Reading />
+              </div>
+            </Route>
+          </Switch>
+        </IpfsRouter>
       </IpfsContext.Provider>
     </div>
   );
