@@ -14,6 +14,7 @@ export const Controller = styled.div`
   color: rgba(0, 0, 0, 25%);
   min-height: 100%;
   min-width: 40px;
+  z-index: 1;
 
   display: flex;
   justify-content: center;

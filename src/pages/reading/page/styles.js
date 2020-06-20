@@ -14,6 +14,8 @@ export const Container = styled.div`
   margin: auto;
   img {
     max-width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 
   .loadingIndicator {
