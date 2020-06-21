@@ -1,9 +1,15 @@
 language: node_js
-notifications: 
-  email: true
+os: linux
+cache: node_modules
+dist: xenial
 node_js: 12.15
-jobs: 
+jobs:
   include: 
     - stage: test
+      if: branch not in (master, release)
+      script: 
+      - npm run lint 
+    - stage: build
+      if: branch in (master, release)
       script: 
       - npm run build 
