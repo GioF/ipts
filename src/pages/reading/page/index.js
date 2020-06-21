@@ -35,6 +35,7 @@ export default function Page({ data, image, ipfs, mode }) {
       controller.abort();
       setImgBuffer([]);
     };
+    // eslint-disable-next-line
   }, [data, image, ipfs, mode]);
 
   return (

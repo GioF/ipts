@@ -17,6 +17,7 @@ export default function Chapter({ cid, ipfs }) {
     return () => {
       document.removeEventListener("keydown", setPageByEvent);
     };
+    // eslint-disable-next-line
   }, [files]);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ export default function Chapter({ cid, ipfs }) {
     return function cleanup() {
       setPageData({});
     };
+    // eslint-disable-next-line
   }, [done, page]);
 
   useEffect(() => {
@@ -83,6 +85,7 @@ export default function Chapter({ cid, ipfs }) {
       if (!done) controller.abort();
       setPage(0);
     };
+    // eslint-disable-next-line
   }, [ipfs, cid]);
 
   return (

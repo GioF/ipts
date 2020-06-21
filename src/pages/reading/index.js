@@ -10,7 +10,7 @@ import { useRef } from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
 
 export default function Reading() {
-  const { ipfs, ipfsState } = useContext(IpfsContext);
+  const { ipfs } = useContext(IpfsContext);
   const formRef = useRef(null);
   const history = useHistory();
   const [formInput, setFormInput] = useState();
