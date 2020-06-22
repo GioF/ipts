@@ -6,7 +6,6 @@ import usePageController from "../../../hooks/usePageController";
 
 export default function Chapter({ cid, ipfs }) {
   const controller = useRef(new AbortController());
-  const [done, setDone] = useState(false);
   const [files, setFiles] = useState([]);
   const [page, setPage, setPageByEvent] = usePageController(0, files.length);
   const [pageData, setPageData] = useState({});
@@ -48,7 +47,7 @@ export default function Chapter({ cid, ipfs }) {
       }
     }
 
-    if (done) {
+    if (mode !== undefined) {
       getPageData();
     }
 
@@ -57,7 +56,7 @@ export default function Chapter({ cid, ipfs }) {
       abortControllerRef.abort();
       setPageData({});
     };
-  }, [done, page, mode, ipfs, files]);
+  }, [page, mode, ipfs, files]);
 
   useEffect(() => {
     //function checks given ipfs for folder info and sets
@@ -77,7 +76,6 @@ export default function Chapter({ cid, ipfs }) {
           ? setMode(modeType.scanlation)
           : setMode(modeType.imageOnly);
       }
-      setDone(true);
     }
 
     if (ipfs && cid) getFolderInfo();
