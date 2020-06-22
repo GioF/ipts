@@ -27,11 +27,11 @@ export default function usePageController(initPage = 0, chapterLength) {
 
   //side effect that pushes the current page number to the history
   useEffect(() => {
-    const { cid } = match.params;
+    const cid = match.params.cid;
     const path = generatePath(match.path, { cid, urlPage: page });
     history.push(path);
-    // eslint-disable-next-line
-  }, [page]);
+    console.log("history effect called");
+  }, [page, match.params.cid, match.path, history]);
 
   const setPageByEvent = useCallback(
     ({ code }) => {
