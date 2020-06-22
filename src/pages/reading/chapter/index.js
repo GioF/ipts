@@ -17,8 +17,7 @@ export default function Chapter({ cid, ipfs }) {
     return () => {
       document.removeEventListener("keydown", setPageByEvent);
     };
-    // eslint-disable-next-line
-  }, [files]);
+  }, [files, setPageByEvent]);
 
   useEffect(() => {
     //gets both translation and image IPFS objects if on scanlation mode
