@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Page from "../page";
 import { Controller, Container } from "./styles";
 import { modeType } from "../../../utils";
 import usePageController from "../../../hooks/usePageController";
 
 export default function Chapter({ cid, ipfs }) {
-  const [controller] = useState(new AbortController());
+  const controller = useRef(new AbortController());
   const [done, setDone] = useState(false);
   const [files, setFiles] = useState([]);
   const [page, setPage, setPageByEvent] = usePageController(0, files.length);
@@ -27,7 +27,7 @@ export default function Chapter({ cid, ipfs }) {
         case modeType.scanlation:
           let pair = [];
           for await (const item of ipfs.ls(files[page].cid, {
-            signal: controller.signal,
+            signal: controller.current.signal,
           })) {
             pair = [...pair, item];
           }
@@ -52,11 +52,12 @@ export default function Chapter({ cid, ipfs }) {
       getPageData();
     }
 
+    const abortControllerRef = controller.current;
     return function cleanup() {
+      abortControllerRef.abort();
       setPageData({});
     };
-    // eslint-disable-next-line
-  }, [done, page]);
+  }, [done, page, mode, ipfs, files]);
 
   useEffect(() => {
     //function checks given ipfs for folder info and sets
@@ -64,7 +65,9 @@ export default function Chapter({ cid, ipfs }) {
     //TODO: refactor for better clarity
     async function getFolderInfo() {
       let dirData = [];
-      for await (const item of ipfs.ls(cid, { signal: controller.signal })) {
+      for await (const item of ipfs.ls(cid, {
+        signal: controller.current.signal,
+      })) {
         dirData.push(item);
       }
       setFiles(dirData);
@@ -79,12 +82,12 @@ export default function Chapter({ cid, ipfs }) {
 
     if (ipfs && cid) getFolderInfo();
 
+    const abortControllerRef = controller.current;
+
     return function cleanup() {
+      abortControllerRef.abort();
       setFiles([]);
-      if (!done) controller.abort();
-      setPage(0);
     };
-    // eslint-disable-next-line
   }, [ipfs, cid]);
 
   return (

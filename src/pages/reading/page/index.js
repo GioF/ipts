@@ -1,6 +1,5 @@
-import React from "react";
 import ReactLoading from "react-loading";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Buffer } from "buffer";
 import { Box, Container } from "./styles";
 import { modeType } from "../../../utils";
@@ -8,7 +7,7 @@ import { modeType } from "../../../utils";
 export default function Page({ data, image, ipfs, mode }) {
   const [imgBuffer, setImgBuffer] = useState([]);
   const [translation, setTranslation] = useState();
-  const [controller] = useState(new AbortController());
+  const controller = useRef(new AbortController());
 
   useEffect(() => {
     //starts to load image then translation from given cid into buffer and aborts
@@ -31,11 +30,11 @@ export default function Page({ data, image, ipfs, mode }) {
 
     if (ipfs && image && mode != null) handleStream();
 
+    const abortControllerRef = controller.current;
     return function cleanup() {
-      controller.abort();
+      abortControllerRef.abort();
       setImgBuffer([]);
     };
-    // eslint-disable-next-line
   }, [data, image, ipfs, mode]);
 
   return (
