@@ -30,7 +30,6 @@ export default function usePageController(initPage = 0, chapterLength) {
     const cid = match.params.cid;
     const path = generatePath(match.path, { cid, urlPage: page });
     history.push(path);
-    console.log("history effect called");
   }, [page, match.params.cid, match.path, history]);
 
   const setPageByEvent = useCallback(
