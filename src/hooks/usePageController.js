@@ -8,19 +8,22 @@ export default function usePageController(initPage = 0, chapterLength) {
   );
   const history = useHistory();
 
-  function setPage(amount) {
-    if (amount > 0) {
-      setLocalPage((currentPage) =>
-        currentPage + amount < chapterLength
-          ? currentPage + amount
-          : currentPage
-      );
-    } else if (amount < 0) {
-      setLocalPage((currentPage) =>
-        currentPage + amount >= 0 ? currentPage + amount : 0
-      );
-    }
-  }
+  const setPage = useCallback(
+    (amount) => {
+      if (amount > 0) {
+        setLocalPage((currentPage) =>
+          currentPage + amount < chapterLength
+            ? currentPage + amount
+            : currentPage
+        );
+      } else if (amount < 0) {
+        setLocalPage((currentPage) =>
+          currentPage + amount >= 0 ? currentPage + amount : 0
+        );
+      }
+    },
+    [chapterLength]
+  );
 
   //side effect that pushes the current page number to the history
   useEffect(() => {
@@ -42,8 +45,7 @@ export default function usePageController(initPage = 0, chapterLength) {
         default:
       }
     },
-    // eslint-disable-next-line
-    [chapterLength]
+    [setPage]
   );
 
   return [page, setPage, setPageByEvent];
